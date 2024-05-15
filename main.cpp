@@ -8,15 +8,14 @@ double function(double x, double y) {
     
     return 2*pow(x, 2) + 4*x*y+8*pow(y, 2)+100;
 }
-void findMinimum(int iterations, double& min_value, double& min_x, double& min_y) {
-    min_value = INFINITY; // Инициализируем min_value очень большим числом
+void findMinimum(int iterations) {
+   double min_value = INFINITY; // Инициализируем min_value очень большим числом
+   double min_x;
+   double min_y;
     for (int i = 0; i < iterations; ++i) {
         // Генерируем случайные значения для x и y
-        double x = static_cast<double>(rand()) / RAND_MAX * 2.0 - 1.0;
-        double y = static_cast<double>(rand()) / RAND_MAX * 2.0 - 1.0;
-
-        x *= RAND_MAX; // Расширяем диапазон x
-        y *= RAND_MAX; // Расширяем диапазон y
+        double x = (static_cast<double>(rand()) / static_cast<double>(RAND_MAX) - 0.5) * 1e8;
+        double y = (static_cast<double>(rand()) / static_cast<double>(RAND_MAX) - 0.5) * 1e8;
 
         // Вычисляем значение функции в случайной точке (x, y)
         double f_value = function(x, y);
@@ -71,18 +70,22 @@ void findMinimumOgr(int iterations, double x_mi, double x_ma, double y_mi, doubl
 int main() {
     setlocale(LC_ALL, "Russian");
     srand(time(0)); // Инициализируем генератор случайных чисел
-
+    
+    //srand(static_cast<unsigned int>(time(0)));
     int iterations1 = 1000000;
     double x_mi = -10;
     double x_ma = 10;
     double y_mi = -10;
     double y_ma = 10;
 
-
-    int iterations2 = 10000000; // Количество итераций для симуляции методом Монте-Карло
-    double min_value2, min_x2, min_y2;
+   
+    int iterations2 = 100000000; // Количество итераций для симуляции методом Монте-Карло
+    
+    std::cout << "Монте-Карло с ограничением точек:" << "\n";
     findMinimumOgr(iterations1, x_mi,x_ma,y_mi,y_ma); // Вызываем функцию поиска минимума с ограничением по точкам  
-    findMinimum(iterations2, min_value2, min_x2, min_y2); // Вызываем функцию поиска минимума без ограничейний по точкам 
+    std::cout <<"\n";
+    std::cout << "Монте-Карло с без ограничения точек:" << "\n";
+    findMinimum(iterations2); // Вызываем функцию поиска минимума без ограничейний по точкам 
 
    
     return 0;
